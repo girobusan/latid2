@@ -13,3 +13,5 @@ import yaml from "js-yaml";
 const helperRx = /<!--\s*(h:|!|@)[a-zA-Z_0-9-]+-->(.+?)<!--\s*\/\/\s*-->/gms;
 const fencedRx = /`{3,5}\n(.*?)`{3,5}\n/gms;
 const paramCommentRx = /<!--\s*([^@][a-zA-Z_0-9-]+)\s*:\s*(.*?)\s*-->/gms;
+
+export default function md2html(src) { }

@@ -37,18 +37,18 @@ yaml: "formatted params"
 
 #### Params in Latid (block.data)
 
-| name              | plain md | params in latid                                                                                           |
-| ----------------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| markdown          | yes      | markdown                                                                                                  |
-| paragraph         | yes      | text                                                                                                      |
-| raw               | ?        | html                                                                                                      |
-| list              | yes      | items ([string]) , style ("ordered" or not)                                                               |
-| code              | yes      | code                                                                                                      |
-| header            | yes      | level , text                                                                                              |
-| script (not used) | yes      | id , url                                                                                                  |
-| quote             |          | text, caption                                                                                             |
-| audio             |          | file.url , autoplay , loop, controls , preload                                                            |
-| video             |          | file.url , autoplay , loop, controls , preload                                                            |
-| badge             |          | class, text                                                                                               |
-| attachment        |          | hidden , title , filename , class , extension , href                                                      |
-| image             |          | caption, file.url , data.link (if image linked) , withBackground , stretched, left, right, noresize, href |
+| name              | plain md | params in latid                                                                                         |
+| ----------------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| markdown          | yes      | markdown                                                                                                |
+| paragraph         | yes      | text                                                                                                    |
+| raw               | ?        | html                                                                                                    |
+| list              | yes      | items ([string]) , style ("ordered" or not)                                                             |
+| code              | yes      | code                                                                                                    |
+| header            | yes      | level, text                                                                                             |
+| script (not used) | yes      | id , url                                                                                                |
+| quote             |          | text, caption                                                                                           |
+| audio             |          | file.url , autoplay , loop, controls, preload                                                           |
+| video             |          | file.url , autoplay , loop, controls, preload                                                           |
+| badge             |          | class, text                                                                                             |
+| attachment        |          | hidden, title , filename , class , extension , href                                                     |
+| image             |          | caption, file.url, data.link (if image linked), withBackground , stretched, left, right, noresize, href |
