@@ -1,0 +1,160 @@
+import { dump } from "js-yaml";
+
+function boolList(list, obj) {
+  return list.filter((e) => obj[e]);
+}
+
+function unBR(txt) {
+  return txt.raplace(/<br\/?>\s*$/, "");
+}
+
+const fence = "```";
+
+const helpers = {
+  attachment: (url, title, className) => {
+    return `
+<!--@attachment-->
+[${title || url}](${url})
+
+<!--title:${title}-->
+<!--url:${url}-->
+<!--class:${className}-->
+<!--//-->
+ 
+`;
+  },
+  quote: (text, caption) => {
+    return `
+<!--@quote-->
+> ${text}
+>
+> _${caption}_
+${fence}
+${dump({ text, caption })}
+${fence}
+<!--//-->
+
+`;
+  },
+
+  media: (type, title, urls, autoplay, loop, controls, preload) => {
+    return `
+<!--@${type}-->
+[${title || type}](${urls[0]})
+${fence}
+${dump({ urls, autoplay, loop, controls, preload })}
+${fence}
+<!--//-->
+
+`;
+  },
+  image: (caption, url, link, classes) => {
+    let imgtag = link
+      ? `[![${caption}](${url})](${link})${caption}`
+      : `![${caption}](${url})`;
+    return `
+<!--@image-->
+${imgtag}
+<!--url:${url}-->
+<!--classes:${classes.join(" ")}-->
+<!--caption:${caption}-->
+<!--link:${link}-->
+<!--//-->
+
+`;
+  },
+};
+
+export function convertBlocks(blocks) {
+  let txt = "";
+  blocks.forEach((blk) => {
+    let t = blk.type;
+    let b = blk.data;
+    switch (t) {
+      //simple ones
+      case "paragraph":
+        txt += b.text + "\n\n";
+        break;
+      case "markdown":
+        txt += b.markdown + "\n\n";
+        break;
+      case "code":
+        txt += "```\n" + b.code + "\n```\n\n";
+        break;
+      case "header":
+        txt += "#######".substring(0, +b.level) + " " + b.text + "\n\n";
+        break;
+      case "list":
+        let lt = b.style === "ordered" ? "1. " : "* ";
+        txt += b.items.map((i) => `${lt}${i}`).join("\n");
+        txt += "\n";
+        break;
+      // complicated
+      case "video":
+        txt += helpers.media(
+          "video",
+          b.caption,
+          [b.file.url],
+          b.autoplay,
+          b.loop,
+          b.controls,
+          b.preload,
+        );
+        break;
+      case "audio":
+        txt += helpers.media(
+          "audio",
+          b.caption,
+          [b.file.url],
+          b.autoplay,
+          b.loop,
+          b.controls,
+          b.preload,
+        );
+        break;
+      case "attachment":
+        if (!b.hidden) {
+          txt += helpers.attachment(b.url, b.title || b.filename, b.class);
+        }
+        break;
+      case "image":
+        const classes = boolList(
+          ["left", "right", "stretched", "noresize", "border"],
+          b,
+        );
+
+        txt += helpers.image(b.caption, b.file.url, b.link, classes);
+        break;
+
+      default:
+        if (b.html) {
+          console.log("Raw html block");
+          txt += "\n" + b.html + "\n";
+          break;
+        }
+        console.log("Unknown block", b);
+    }
+  });
+  return txt;
+}
+
+export function convertJson(jsn) {
+  let meta = jsn.meta;
+  if (!meta) {
+    console.log(jsn);
+  }
+  meta.date && (meta.date = meta.date.replace(/\//g, "."));
+  let content;
+  if (jsn.content_format !== "blocks") {
+    console.log("Ancient content format:", jsn.content_format);
+    console.log(jsn.content);
+    content = jsn.content;
+  } else {
+    content = convertBlocks(jsn.content.blocks);
+  }
+  return `---
+${dump(meta)}
+---
+${content}
+`;
+}
