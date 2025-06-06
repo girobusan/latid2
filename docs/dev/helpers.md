@@ -52,3 +52,5 @@ yaml: "formatted params"
 | badge             |          | class, text                                                                                             |
 | attachment        |          | hidden, title , filename , class , extension , href                                                     |
 | image             |          | caption, file.url, data.link (if image linked), withBackground , stretched, left, right, noresize, href |
+
+<script src="../view.js"></script>
