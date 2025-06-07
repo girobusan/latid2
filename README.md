@@ -13,7 +13,7 @@ Project is on earliest stage, experimental, unusable.
 
 1. [ ] Convertor from L1
    - [x] blocks
-   - [ ] files
+   - [x] files
 2. [ ] CLI utility
    - [ ] New list mechanics
    - [ ] Improved templating

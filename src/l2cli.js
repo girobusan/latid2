@@ -51,3 +51,18 @@ const toCopy = preprocessFileList(
 console.info("Copy assets:", toCopy.length, "files");
 toCopy.forEach((f) => fs.copyFile(f.src, path.join(outputDir, f.path)));
 //COPY THEME FILES
+if (CONFIG.theme) {
+  const themeFilesPath = path.join(
+    inputDir,
+    "config/themes/assets",
+    CONFIG.theme,
+  );
+  if (fs.existsSync(themeFilesPath)) {
+    const themeOuptputPath = path.join(outputDir, "_themes", CONFIG.theme);
+    fs.cp(themeFilesPath, themeOuptputPath, { recursive: true }, (err) =>
+      console.error("Can not copy theme files", err),
+    );
+  } else {
+    console.info("Theme does not include assets to copy.");
+  }
+}

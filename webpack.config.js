@@ -49,7 +49,7 @@ const commonSettings = {
   },
 };
 
-module.exports = function(_, argv) {
+module.exports = function (_, argv) {
   let builddir = argv.mode == "production" ? "dist" : "test";
 
   const nodePart = {
@@ -59,7 +59,8 @@ module.exports = function(_, argv) {
 
     mode: argv.mode,
     entry: {
-      converter: "./src/l2l2.js",
+      l2l2: "./src/l2l2.js",
+      l2cli: "./src/l2cli.js",
     },
     devtool: argv.mode != "production" ? "inline-source-map" : false,
 
