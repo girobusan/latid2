@@ -2,8 +2,21 @@
 const { parseArgs } = require("node:util");
 const fs = require("fs");
 const path = require("path");
+const posixpath = require("path/posix");
 const yaml = require("js-yaml");
 import { preprocessFileList } from "./lib/process_files";
+
+function fixPath(p) {
+  // let r = posixpath.join(path.split(p));
+  // if (!r.startsWith("/")) {
+  //   r = "/" + r;
+  // }
+  let r = p.replace(/\\/g, "/");
+  if (!r.startsWith("/")) {
+    r = "/" + p;
+  }
+  return r;
+}
 
 const options = {
   input: { type: "string", short: "i" },
@@ -33,9 +46,12 @@ let inputFiles = fs
   .map((f) => {
     return {
       src: path.join(f.parentPath, f.name),
-      getContent: () => fs.readFileSync(path.join(f.parentPath, f.name)),
+      getContent: () =>
+        fs.readFileSync(path.join(f.parentPath, f.name), { encoding: "utf8" }),
       filename: f.name,
-      path: path.join(f.parentPath, f.name).substring(filesInputDir.length),
+      path: fixPath(
+        path.join(f.parentPath, f.name).substring(filesInputDir.length),
+      ),
     };
   });
 
@@ -48,8 +64,15 @@ const toCopy = preprocessFileList(
   CONFIG,
 );
 // why not async
-console.info("Copy assets:", toCopy.length, "files");
-toCopy.forEach((f) => fs.copyFile(f.src, path.join(outputDir, f.path)));
+console.info("Copying", toCopy.length, "assets...");
+toCopy.forEach((f) =>
+  fs.cp(
+    f.src,
+    path.join(outputDir, f.path),
+    { recursive: true, force: true },
+    (e) => e && console.log(e),
+  ),
+);
 //COPY THEME FILES
 if (CONFIG.theme) {
   const themeFilesPath = path.join(
@@ -59,8 +82,11 @@ if (CONFIG.theme) {
   );
   if (fs.existsSync(themeFilesPath)) {
     const themeOuptputPath = path.join(outputDir, "_themes", CONFIG.theme);
-    fs.cp(themeFilesPath, themeOuptputPath, { recursive: true }, (err) =>
-      console.error("Can not copy theme files", err),
+    fs.cp(
+      themeFilesPath,
+      themeOuptputPath,
+      { recursive: true, force: true },
+      (err) => err && console.error("Can not copy theme files", err),
     );
   } else {
     console.info("Theme does not include assets to copy.");

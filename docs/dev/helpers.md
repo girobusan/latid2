@@ -1,18 +1,31 @@
 # Helpers
 
 ````
-<!--h:helper_name-->
+<!--@helper_name-->
 
 Any markdown to represent content in regular md viewer
 
-<!--param1:value-->
-<!--param2:value-->
 
 ```
 yaml: "formatted params"
 ```
 <!--//-->
 ````
+
+or
+
+```
+<!--@helper_name-->
+
+Any markdown to represent content in regular md viewer
+
+
+<!--
+yaml: "formatted params"
+-->
+
+<!--//-->
+```
 
 <!--test comments-->
 

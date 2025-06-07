@@ -14,7 +14,9 @@ Project is on earliest stage, experimental, unusable.
 1. [ ] Convertor from L1
    - [x] blocks
    - [x] files
+   - [ ] test on large site
 2. [ ] CLI utility
+   - [x] RSS
    - [ ] New list mechanics
    - [ ] Improved templating
 3. [ ] Server & WebUI

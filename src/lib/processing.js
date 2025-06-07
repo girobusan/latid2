@@ -23,14 +23,5 @@ const yaml = require("js-yaml");
 // - ...
 
 export function process(plist, config, writeFn) {
-  const FILES = [];
-  plist.forEach((f) => {
-    const parts = extractFM(f.getContent());
-    const file = {
-      file: f,
-      content: parts.content,
-      meta: yaml.load(parts.meta),
-    };
-    FILES.push(file);
-  });
+  //plist is list of preparsed files
 }
