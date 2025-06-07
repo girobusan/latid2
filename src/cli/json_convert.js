@@ -16,9 +16,9 @@ const helpers = {
 <!--@attachment-->
 [${title || url}](${url})
 
-<!--title:${title}-->
-<!--url:${url}-->
-<!--class:${className}-->
+${fence}
+${dump({ title, url, className })}
+${fence}
 <!--//-->
  
 `;
@@ -29,6 +29,7 @@ const helpers = {
 > ${text}
 >
 > _${caption}_
+
 ${fence}
 ${dump({ text, caption })}
 ${fence}
@@ -41,6 +42,7 @@ ${fence}
     return `
 <!--@${type}-->
 [${title || type}](${urls[0]})
+
 ${fence}
 ${dump({ urls, autoplay, loop, controls, preload })}
 ${fence}
@@ -55,10 +57,10 @@ ${fence}
     return `
 <!--@image-->
 ${imgtag}
-<!--url:${url}-->
-<!--classes:${classes.join(" ")}-->
-<!--caption:${caption}-->
-<!--link:${link}-->
+
+${fence}
+${dump(caption, url, link, classes)}
+${fence}
 <!--//-->
 
 `;
@@ -115,6 +117,8 @@ export function convertBlocks(blocks) {
       case "attachment":
         if (!b.hidden) {
           txt += helpers.attachment(b.url, b.title || b.filename, b.class);
+        } else {
+          txt += "\n\n" + `<!--attached: ${b.url}-->` + "\n\n";
         }
         break;
       case "image":
